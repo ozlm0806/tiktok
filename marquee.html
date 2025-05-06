@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>透明跑馬燈</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: sans-serif;
+    }
+
+    .marquee-container {
+      width: 100vw;
+      height: 60px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .marquee-track {
+      display: flex;
+      white-space: nowrap;
+      will-change: transform;
+    }
+
+    .marquee-text {
+      font-size: 32px;
+      font-weight: bold;
+      padding-right: 50px;
+      letter-spacing: 2px;
+      background: linear-gradient(to right, #FFD700, #FF8C00, #FF4500);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-fill-color: transparent;
+    }
+
+    .controls {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: white;
+    }
+
+    label {
+      font-size: 14px;
+    }
+
+    select, input[type="range"] {
+      width: 200px;
+    }
+
+    @keyframes scroll-left {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    @keyframes scroll-bounce {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(-25%); }
+    }
+
+    @keyframes scroll-reverse {
+      0% { transform: translateX(0); }
+      50% { transform: translateX(-50%); }
+      100% { transform: translateX(0); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="marquee-container">
+  <div class="marquee-track" id="track">
+    <div class="marquee-text" id="text">
+      ❤️ 點燈支持 ✨ 按讚鼓勵 🎁 送禮物支持主播！每人一字、不寫髒話、諧音、生僻字，請先關注再點字！
+    </div>
+    <div class="marquee-text" id="text-clone"></div>
+  </div>
+</div>
+
+<div class="controls">
+  <label for="speedSlider">滾動速度（秒）</label>
+  <input type="range" id="speedSlider" min="5" max="30" value="20">
+
+  <label for="animationSelect">動畫樣式</label>
+  <select id="animationSelect">
+    <option value="scroll-left">線性左滾</option>
+    <option value="scroll-bounce">彈跳來回</option>
+    <option value="scroll-reverse">左右往返</option>
+  </select>
+</div>
+
+<script>
+  const track = document.getElementById("track");
+  const text = document.getElementById("text");
+  const clone = document.getElementById("text-clone");
+  const speedSlider = document.getElementById("speedSlider");
+  const animationSelect = document.getElementById("animationSelect");
+
+  // 複製文字以達成無縫
+  clone.innerHTML = text.innerHTML;
+
+  function updateAnimation() {
+    const speed = speedSlider.value;
+    const anim = animationSelect.value;
+    track.style.animation = `${anim} ${speed}s linear infinite`;
+  }
+
+  speedSlider.addEventListener("input", updateAnimation);
+  animationSelect.addEventListener("change", updateAnimation);
+
+  // 初始化
+  updateAnimation();
+</script>
+
+</body>
+</html>
